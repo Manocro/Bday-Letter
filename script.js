@@ -29,6 +29,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 content.classList.add('visible');
             }, 50);
 
-        }, 1000); // Wait for flap to open
+            const prevBtn = document.getElementById('nav-prev');
+            const nextBtn = document.getElementById('nav-next');
+            let currentPage = 1;
+            const totalPages = 3;
+
+            function updateNavigation() {
+                // Show/Hide Pages
+                for (let i = 1; i <= totalPages; i++) {
+                    const page = document.getElementById(`page-${i}`);
+                    if (i === currentPage) {
+                        page.classList.add('active');
+                    } else {
+                        page.classList.remove('active');
+                    }
+                }
+
+                // Show/Hide Corners
+                if (currentPage === 1) {
+                    prevBtn.classList.add('hidden');
+                    nextBtn.classList.remove('hidden');
+                } else if (currentPage === totalPages) {
+                    prevBtn.classList.remove('hidden');
+                    nextBtn.classList.add('hidden');
+                } else {
+                    prevBtn.classList.remove('hidden');
+                    nextBtn.classList.remove('hidden');
+                }
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updateNavigation();
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updateNavigation();
+                }
+            });
+
+            // Initialize state
+            updateNavigation();
+        }, 1000);
     });
 });

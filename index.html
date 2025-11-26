@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For You</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div class="container">
         <div class="envelope-wrapper" id="envelope-wrapper">
@@ -23,30 +26,87 @@
 
         <div class="content hidden" id="content">
             <div class="card">
-                <header>
-                    <h1>To my love...</h1>
-                </header>
-                <section class="letter">
+                <!-- Page 1: Letter + 2 Photos -->
+                <div class="page active" id="page-1">
+                    <header>
+                        <h1>To my love...</h1>
+                    </header>
+                    <section class="letter">
+                        <p>
+                            I wanted to create something special for you, I know we said it as a joke a little bit but,
+                            here is a small and little digital corner where I can keep some of our memories.
+                            Open this whenever you need a reminder of how much you mean to me.
+                        </p>
+                        <div class="photo-grid page-1-photos">
+                            <div class="photo-frame">
+                                <img src="assets/images/1.jpg" alt="Our Memory 1">
+                            </div>
+                            <div class="photo-frame">
+                                <img src="assets/images/2.jpg" alt="Our Memory 2">
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Page 2: Gallery - 3 Photos -->
+                <div class="page" id="page-2">
+                    <h2>Our Memories</h2>
                     <p>
-                        I wanted to create something special for you, a little digital corner where I can keep some of our memories.
-                        Open this whenever you need a reminder of how much you mean to me.
+                        I want you to know that I love you more than words can express.
+                        I can make songs, I can make music that you might not understand, and there is no other way to
+                        fully express my love for you.
+                        I know I haven’t always been perfect. I am truly sorry for the mistakes I’ve made, and I am so
+                        grateful that you’ve stuck with me through everything we’ve endured.
+                        Thank you for the love you give me, and thank you for existing. My life is better just because
+                        you are in it.
+                        I’m not always the most creative guy, but I poured my heart into this for you. I hope you love
+                        it.
                     </p>
-                </section>
-                <section class="gallery">
-                    <!-- Placeholders for now -->
-                    <div class="photo-grid">
-                        <div class="photo-placeholder">Memory 1</div>
-                        <div class="photo-placeholder">Memory 2</div>
-                        <div class="photo-placeholder">Memory 3</div>
-                    </div>
-                </section>
-                <footer>
-                    <p>Forever yours,</p>
-                    <p class="signature">Manuel</p>
-                </footer>
+                    <section class="gallery">
+                        <div class="photo-grid page-2-photos">
+                            <div class="photo-frame">
+                                <img src="assets/images/3.jpg" alt="Our Memory 3">
+                            </div>
+                            <div class="photo-frame">
+                                <img src="assets/images/6.jpg" alt="Our Memory 4">
+                            </div>
+                            <div class="photo-frame">
+                                <img src="assets/images/5.jpg" alt="Our Memory 5">
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Page 3: Closing + 1 Photo -->
+                <div class="page" id="page-3">
+                    <section class="closing">
+                        <div class="photo-grid page-3-photos">
+                            <div class="photo-frame">
+                                <img src="assets/images/4.jpg" alt="Our Memory 6">
+                            </div>
+                        </div>
+                        <p>
+                            Every moment with you is a treasure. I can't wait for all the memories
+                            we have yet to make.
+                        </p>
+                        <footer>
+                            <p>Forever yours,</p>
+                            <p class="signature">Manuel</p>
+                        </footer>
+                    </section>
+                </div>
+
+                <!-- Navigation Corners -->
+                <div class="corner-nav next-page" id="nav-next">
+                    <div class="corner-triangle"></div>
+                </div>
+                <div class="corner-nav prev-page" id="nav-prev">
+                    <div class="corner-triangle"></div>
+                </div>
             </div>
         </div>
     </div>
     <script src="script.js"></script>
 </body>
+
 </html>
