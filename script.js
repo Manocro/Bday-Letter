@@ -5,18 +5,113 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let isOpen = false;
 
+    // Confetti explosion function - TWO bursts from sides
+    function createConfetti() {
+        const confettiContainer = document.createElement('div');
+        confettiContainer.className = 'confetti-container';
+        document.body.appendChild(confettiContainer);
+
+        const colors = ['#FF6B9D', '#C239B3', '#67C6E3', '#FFD93D', '#6BCB77', '#FF6B6B'];
+        const confettiPerBurst = 120;
+
+        // Get envelope position
+        const envelopeRect = envelopeWrapper.getBoundingClientRect();
+
+        // Left side burst position
+        const leftX = envelopeRect.left;
+        const leftY = envelopeRect.top + envelopeRect.height / 2;
+
+        // Right side burst position
+        const rightX = envelopeRect.right;
+        const rightY = envelopeRect.top + envelopeRect.height / 2;
+
+        // Create left burst
+        for (let i = 0; i < confettiPerBurst; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const size = Math.random() * 8 + 4;
+            // Spread to the LEFT (135° to 225°)
+            const angle = 135 + Math.random() * 90;
+            const distance = Math.random() * 300 + 150;
+            const duration = Math.random() * 2 + 2;
+            const delay = Math.random() * 0.2;
+
+            confetti.style.cssText = `
+                position: fixed;
+                left: ${leftX}px;
+                top: ${leftY}px;
+                width: ${size}px;
+                height: ${size}px;
+                background-color: ${color};
+                opacity: 1;
+                z-index: 5;
+                pointer-events: none;
+                animation: confettiFall ${duration}s ease-out ${delay}s forwards;
+            `;
+
+            confetti.style.setProperty('--tx', `${Math.cos(angle * Math.PI / 180) * distance}px`);
+            confetti.style.setProperty('--ty', `${Math.sin(angle * Math.PI / 180) * distance}px`);
+            confetti.style.setProperty('--rotation', `${Math.random() * 720 - 360}deg`);
+
+            confettiContainer.appendChild(confetti);
+        }
+
+        // Create right burst
+        for (let i = 0; i < confettiPerBurst; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const size = Math.random() * 8 + 4;
+            // Spread to the RIGHT (-45° to 45°)
+            const angle = -45 + Math.random() * 90;
+            const distance = Math.random() * 300 + 150;
+            const duration = Math.random() * 2 + 2;
+            const delay = Math.random() * 0.2;
+
+            confetti.style.cssText = `
+                position: fixed;
+                left: ${rightX}px;
+                top: ${rightY}px;
+                width: ${size}px;
+                height: ${size}px;
+                background-color: ${color};
+                opacity: 1;
+                z-index: 5;
+                pointer-events: none;
+                animation: confettiFall ${duration}s ease-out ${delay}s forwards;
+            `;
+
+            confetti.style.setProperty('--tx', `${Math.cos(angle * Math.PI / 180) * distance}px`);
+            confetti.style.setProperty('--ty', `${Math.sin(angle * Math.PI / 180) * distance}px`);
+            confetti.style.setProperty('--rotation', `${Math.random() * 720 - 360}deg`);
+
+            confettiContainer.appendChild(confetti);
+        }
+
+        // Remove confetti after animation
+        setTimeout(() => {
+            confettiContainer.remove();
+        }, 5000);
+    }
+
     envelopeWrapper.addEventListener('click', () => {
         if (isOpen) return;
         isOpen = true;
 
-        // 1. Vibrate
+        // 1. Vibrate (longer, more intense)
         envelopeWrapper.classList.add('vibrate');
 
-        // 2. Open Flap after vibration
+        // 2. Open Flap after vibration + trigger confetti
         setTimeout(() => {
             envelopeWrapper.classList.remove('vibrate');
             envelopeWrapper.classList.add('open');
-        }, 500); // Matches animation duration
+
+            // Trigger confetti explosion
+            createConfetti();
+        }, 1500); // Matches new animation duration
 
         // 3. Slide down envelope and show content
         setTimeout(() => {
@@ -74,6 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Initialize state
             updateNavigation();
-        }, 1000);
+        }, 2000); // Adjusted to give time for vibration + opening
     });
 });
