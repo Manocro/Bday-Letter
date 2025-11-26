@@ -397,6 +397,51 @@ p {
     grid-template-columns: repeat(3, 1fr);
 }
 
+/* Page 2 photos get the same floating animation and shadow as page 1 */
+#page-2 .photo-frame {
+    animation: float 3s ease-in-out infinite;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Sparkles on hover for page 2 */
+#page-2 .photo-frame::before,
+#page-2 .photo-frame::after {
+    content: '';
+    position: absolute;
+    font-size: 20px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+#page-2 .photo-frame::before {
+    top: 10%;
+    right: 10%;
+}
+
+#page-2 .photo-frame::after {
+    bottom: 10%;
+    left: 10%;
+}
+
+#page-2 .photo-frame:hover::before {
+    animation: sparkle 1.5s ease-in-out infinite;
+}
+
+#page-2 .photo-frame:hover::after {
+    animation: sparkle 1.5s ease-in-out infinite 0.75s;
+}
+
+/* Glowing aura on hover for page 2 */
+#page-2 .photo-frame:hover {
+    box-shadow:
+        0 8px 16px rgba(0, 0, 0, 0.2),
+        0 0 20px rgba(255, 215, 0, 0.4),        0 0 40px rgba(255, 215, 0, 0.3),
+        0 0 60px rgba(255, 215, 0, 0.2);
+    animation: float 3s ease-in-out infinite, glow 2s ease-in-out infinite;
+}
+
+
 /* Ensure all page 2 photos are exactly the same size */
 #page-2 .photo-frame img {
     width: 100%;
