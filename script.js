@@ -111,6 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Trigger confetti explosion
             createConfetti();
+
+            // Show background overlay
+            document.getElementById('background-overlay').classList.add('visible');
         }, 1500); // Matches new animation duration
 
         // 3. Slide down envelope and show content

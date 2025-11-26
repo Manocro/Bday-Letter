@@ -31,6 +31,30 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    align-items: center;
+    z-index: 2;
+    /* Ensure container is above background */
+}
+
+/* Background Overlay */
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/images/background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 2s ease;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.background-overlay.visible {
+    opacity: 1;
 }
 
 /* Envelope Styles */
@@ -436,7 +460,7 @@ p {
 #page-2 .photo-frame:hover {
     box-shadow:
         0 8px 16px rgba(0, 0, 0, 0.2),
-        0 0 20px rgba(255, 215, 0, 0.4),        0 0 40px rgba(255, 215, 0, 0.3),
+        0 0 20px rgba(255, 215, 0, 0.4), 0 0 40px rgba(255, 215, 0, 0.3),
         0 0 60px rgba(255, 215, 0, 0.2);
     animation: float 3s ease-in-out infinite, glow 2s ease-in-out infinite;
 }
@@ -483,8 +507,25 @@ p {
     border-radius: 4px;
 }
 
-/* Responsive */
+/* ========================================
+   RESPONSIVE DESIGN - MOBILE OPTIMIZATIONS
+   ======================================== */
+
+/* Mobile - All phones up to 600px */
 @media (max-width: 600px) {
+
+    /* Content card adjustments for mobile */
+    .content {
+        width: 95%;
+        height: 85vh;
+        padding: 20px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        /* Smooth scrolling on iOS */
+    }
+
+    /* Envelope - standard mobile size */
     .envelope {
         width: 260px;
         height: 180px;
@@ -506,8 +547,26 @@ p {
         border-right-width: 130px;
     }
 
+    /* Typography adjustments */
     h1 {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+
+    p {
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 15px;
+    }
+
+    .signature {
+        font-size: 1.6rem;
+        margin-top: 20px;
     }
 
     /* Stack floated images on mobile */
@@ -521,6 +580,96 @@ p {
     /* Stack photos on mobile */
     .page-2-photos {
         grid-template-columns: 1fr;
+    }
+
+    /* Larger touch targets for navigation */
+    .corner-nav {
+        width: 80px;
+        height: 80px;
+    }
+
+    /* Adjust photo frame sizes for mobile */
+    .photo-frame {
+        margin-bottom: 15px;
+    }
+
+    #page-2 .photo-frame img {
+        height: 200px;
+    }
+
+    /* Page layout adjustments */
+    .page {
+        padding: 10px;
+    }
+}
+
+/* Small phones - iPhone SE, older Androids (320px - 375px) */
+@media (max-width: 375px) {
+
+    /* Further reduce content padding */
+    .content {
+        padding: 15px;
+        width: 98%;
+    }
+
+    /* Smaller envelope for tiny screens */
+    .envelope {
+        width: 220px;
+        height: 150px;
+    }
+
+    .flap {
+        border-left-width: 110px;
+        border-right-width: 110px;
+    }
+
+    .body {
+        border-left-width: 110px;
+        border-right-width: 110px;
+    }
+
+    .envelope::before,
+    .envelope::after {
+        border-left-width: 110px;
+        border-right-width: 110px;
+    }
+
+    /* Smaller typography for small screens */
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    p {
+        font-size: 0.95rem;
+    }
+
+    .signature {
+        font-size: 1.4rem;
+    }
+
+    /* Adjust photo sizes */
+    #page-2 .photo-frame img {
+        height: 180px;
+    }
+}
+
+/* Large phones & small tablets - iPhone Pro Max, Galaxy S series (601px - 768px) */
+@media (min-width: 601px) and (max-width: 768px) {
+    .content {
+        padding: 30px;
+        max-width: 90%;
+    }
+
+    h1 {
+        font-size: 2.8rem;
+    }
+
+    h2 {
+        font-size: 2.2rem;
     }
 }
 
@@ -553,10 +702,10 @@ p {
 /* Corner Navigation */
 .corner-nav {
     position: absolute;
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     cursor: pointer;
-    z-index: 20;
+    z-index: 1000;
     overflow: hidden;
     transition: transform 0.3s ease;
 }
