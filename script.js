@@ -1,177 +1,315 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const envelopeWrapper = document.getElementById('envelope-wrapper');
-    const content = document.getElementById('content');
-    const seal = document.getElementById('seal');
+    // --- Configuration ---
+    const colorsBday = ['#FF6B9D', '#C239B3', '#67C6E3', '#FFD93D', '#6BCB77', '#FF6B6B'];
+    const colorsValentine = ['#FF0000', '#FF4D4D', '#FF9999', '#E91E63', '#C2185B']; // Shades of Red/Pink
 
-    let isOpen = false;
+    // --- State Management ---
+    const letters = Array.from(document.querySelectorAll('.letter-card'));
+    let currentIndex = 0; // Start with Bday letter (index 0)
 
-    // Confetti explosion function - TWO bursts from sides
-    function createConfetti() {
-        const confettiContainer = document.createElement('div');
-        confettiContainer.className = 'confetti-container';
-        document.body.appendChild(confettiContainer);
+    const prevLetterBtn = document.getElementById('prev-letter');
+    const nextLetterBtn = document.getElementById('next-letter');
 
-        const colors = ['#FF6B9D', '#C239B3', '#67C6E3', '#FFD93D', '#6BCB77', '#FF6B6B'];
-        const confettiPerBurst = 120;
+    // Initialize Stack
+    updateStack();
 
-        // Get envelope position
-        const envelopeRect = envelopeWrapper.getBoundingClientRect();
+    // --- Navigation Logic ---
+    function updateStack() {
+        console.log("updateStack called. currentIndex:", currentIndex);
+        letters.forEach((letter, index) => {
+            letter.classList.remove('active', 'prev', 'next', 'far-back');
 
-        // Left side burst position
-        const leftX = envelopeRect.left;
-        const leftY = envelopeRect.top + envelopeRect.height / 2;
-
-        // Right side burst position
-        const rightX = envelopeRect.right;
-        const rightY = envelopeRect.top + envelopeRect.height / 2;
-
-        // Create left burst
-        for (let i = 0; i < confettiPerBurst; i++) {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            const size = Math.random() * 8 + 4;
-            // Spread to the LEFT (135° to 225°)
-            const angle = 135 + Math.random() * 90;
-            const distance = Math.random() * 300 + 150;
-            const duration = Math.random() * 2 + 2;
-            const delay = Math.random() * 0.2;
-
-            confetti.style.cssText = `
-                position: fixed;
-                left: ${leftX}px;
-                top: ${leftY}px;
-                width: ${size}px;
-                height: ${size}px;
-                background-color: ${color};
-                opacity: 1;
-                z-index: 5;
-                pointer-events: none;
-                animation: confettiFall ${duration}s ease-out ${delay}s forwards;
-            `;
-
-            confetti.style.setProperty('--tx', `${Math.cos(angle * Math.PI / 180) * distance}px`);
-            confetti.style.setProperty('--ty', `${Math.sin(angle * Math.PI / 180) * distance}px`);
-            confetti.style.setProperty('--rotation', `${Math.random() * 720 - 360}deg`);
-
-            confettiContainer.appendChild(confetti);
-        }
-
-        // Create right burst
-        for (let i = 0; i < confettiPerBurst; i++) {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            const size = Math.random() * 8 + 4;
-            // Spread to the RIGHT (-45° to 45°)
-            const angle = -45 + Math.random() * 90;
-            const distance = Math.random() * 300 + 150;
-            const duration = Math.random() * 2 + 2;
-            const delay = Math.random() * 0.2;
-
-            confetti.style.cssText = `
-                position: fixed;
-                left: ${rightX}px;
-                top: ${rightY}px;
-                width: ${size}px;
-                height: ${size}px;
-                background-color: ${color};
-                opacity: 1;
-                z-index: 5;
-                pointer-events: none;
-                animation: confettiFall ${duration}s ease-out ${delay}s forwards;
-            `;
-
-            confetti.style.setProperty('--tx', `${Math.cos(angle * Math.PI / 180) * distance}px`);
-            confetti.style.setProperty('--ty', `${Math.sin(angle * Math.PI / 180) * distance}px`);
-            confetti.style.setProperty('--rotation', `${Math.random() * 720 - 360}deg`);
-
-            confettiContainer.appendChild(confetti);
-        }
-
-        // Remove confetti after animation
-        setTimeout(() => {
-            confettiContainer.remove();
-        }, 5000);
+            if (index === currentIndex) {
+                console.log(`Setting letter ${index} to ACTIVE`);
+                letter.classList.add('active');
+            } else if (index === (currentIndex + 1) % letters.length) {
+                // Next in loop
+                letter.classList.add('next');
+            } else if (index === (currentIndex - 1 + letters.length) % letters.length) {
+                // Prev in loop
+                letter.classList.add('prev');
+            } else {
+                letter.classList.add('far-back');
+            }
+        });
     }
 
-    envelopeWrapper.addEventListener('click', () => {
-        if (isOpen) return;
-        isOpen = true;
+    function rotateStack(direction) {
+        console.log("rotateStack called. Direction:", direction);
+        if (direction === 'next') {
+            currentIndex = (currentIndex + 1) % letters.length;
+        } else {
+            currentIndex = (currentIndex - 1 + letters.length) % letters.length;
+        }
+        updateStack();
+    }
 
-        // 1. Vibrate (longer, more intense)
-        envelopeWrapper.classList.add('vibrate');
+    // Button Listeners
+    nextLetterBtn.addEventListener('click', () => rotateStack('next'));
+    prevLetterBtn.addEventListener('click', () => rotateStack('prev'));
 
-        // 2. Open Flap after vibration + trigger confetti
-        setTimeout(() => {
-            envelopeWrapper.classList.remove('vibrate');
-            envelopeWrapper.classList.add('open');
+    // Swipe Support (Basic) - Disabled for stability
+    // let touchStartX = 0;
+    // let touchEndX = 0;
 
-            // Trigger confetti explosion
-            createConfetti();
+    // document.querySelector('.stack-container').addEventListener('touchstart', e => {
+    //     touchStartX = e.changedTouches[0].screenX;
+    // });
 
-            // Show background overlay
-            document.getElementById('background-overlay').classList.add('visible');
-        }, 1500); // Matches new animation duration
+    // document.querySelector('.stack-container').addEventListener('touchend', e => {
+    //     touchEndX = e.changedTouches[0].screenX;
+    //     handleSwipe();
+    // });
 
-        // 3. Slide down envelope and show content
-        setTimeout(() => {
-            envelopeWrapper.classList.add('fade-out');
+    // function handleSwipe() {
+    //     const threshold = 50;
+    //     if (touchEndX < touchStartX - threshold) {
+    //         rotateStack('next'); // Swipe Left -> Show Next
+    //     }
+    //     if (touchEndX > touchStartX + threshold) {
+    //         rotateStack('prev'); // Swipe Right -> Show Prev
+    //     }
+    // }
 
-            // Show content
-            content.classList.remove('hidden');
-            // Small delay to allow display:block to apply before opacity transition
+
+    // --- Letter Logic (Scoped per instance) ---
+    letters.forEach(letterCard => {
+        const wrapper = letterCard.querySelector('.envelope-wrapper');
+        const content = letterCard.querySelector('.content');
+        const closeBtn = letterCard.querySelector('.close-icon');
+        const navNext = letterCard.querySelector('.corner-nav.next-page');
+        const navPrev = letterCard.querySelector('.corner-nav.prev-page');
+        const pages = letterCard.querySelectorAll('.page');
+
+        let isOpen = false;
+        let currentPage = 1;
+        const totalPages = pages.length;
+
+        // Open Envelope
+        wrapper.addEventListener('click', (e) => {
+            // Only allow interaction if letter is active
+            if (!letterCard.classList.contains('active')) return;
+            if (isOpen) return;
+
+            e.stopPropagation(); // Prevent bubbling causing issues
+
+            isOpen = true;
+            wrapper.classList.add('vibrate');
+
+            // Hide Main Navigation to focus on letter
+            prevLetterBtn.style.opacity = '0';
+            nextLetterBtn.style.opacity = '0';
+            prevLetterBtn.style.pointerEvents = 'none';
+            nextLetterBtn.style.pointerEvents = 'none';
+
+            // Determine Effect Type
+            const isValentine = letterCard.id === 'letter-valentine';
+
+            // Phase 1: Vibration finishes, Open Flap
             setTimeout(() => {
+                wrapper.classList.remove('vibrate');
+                wrapper.classList.add('open');
+
+                // Trigger Effect
+                // console.log("Effects DISABLED for debugging");
+                // if (isValentine) {
+                //     createHearts(wrapper);
+                // } else {
+                //     createConfetti(wrapper, colorsBday);
+                // }
+
+                // document.getElementById('background-overlay').classList.add('visible');
+                console.log("Background Overlay DISABLED for debugging");
+            }, 1000);
+
+            // Phase 2: Show Content (overlap with flap opening)
+            setTimeout(() => {
+                // Enter "Reading Mode" - flatten 3D stack
+                letterCard.classList.add('reading-mode');
+
+                // Hide envelope after transition to prevent interference
+                wrapper.classList.add('fade-out');
+                setTimeout(() => {
+                    wrapper.style.display = 'none';
+                }, 500);
+
+                // Content Appearance Logic
+                content.classList.remove('hidden');
+                content.style.display = 'block';
+
+                // Force reflow
+                void content.offsetWidth;
+
                 content.classList.add('visible');
-            }, 50);
 
-            const prevBtn = document.getElementById('nav-prev');
-            const nextBtn = document.getElementById('nav-next');
-            let currentPage = 1;
-            const totalPages = 3;
+                updatePageNavigation();
+            }, 800); // Slightly faster timing
+        });
 
-            function updateNavigation() {
-                // Show/Hide Pages
-                for (let i = 1; i <= totalPages; i++) {
-                    const page = document.getElementById(`page-${i}`);
-                    if (i === currentPage) {
-                        page.classList.add('active');
-                    } else {
-                        page.classList.remove('active');
-                    }
-                }
+        // Close Envelope (Back functionality)
+        if (closeBtn) {
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
 
-                // Show/Hide Corners
-                if (currentPage === 1) {
-                    prevBtn.classList.add('hidden');
-                    nextBtn.classList.remove('hidden');
-                } else if (currentPage === totalPages) {
-                    prevBtn.classList.remove('hidden');
-                    nextBtn.classList.add('hidden');
+                // Hide content
+                content.classList.remove('visible');
+
+                setTimeout(() => {
+                    content.classList.add('hidden');
+                    content.style.display = 'none';
+
+                    // Exit "Reading Mode"
+                    letterCard.classList.remove('reading-mode');
+
+                    // Reset envelope
+                    wrapper.style.display = 'flex';
+                    // Force reflow for envelope re-appearance if needed
+                    void wrapper.offsetWidth;
+                    wrapper.classList.remove('fade-out', 'open');
+
+                    // Reset state
+                    isOpen = false;
+                    document.getElementById('background-overlay').classList.remove('visible');
+
+                    // Show Main Navigation
+                    prevLetterBtn.style.opacity = '1';
+                    nextLetterBtn.style.opacity = '1';
+                    prevLetterBtn.style.pointerEvents = 'auto';
+                    nextLetterBtn.style.pointerEvents = 'auto';
+                }, 500); // Wait for transition
+            });
+        }
+
+        // Internal Page Navigation
+        function updatePageNavigation() {
+            // Show/Hide Pages
+            pages.forEach((page, i) => {
+                if (i + 1 === currentPage) {
+                    page.classList.add('active');
+                    page.style.display = 'flex'; // Ensure flex layout is applied
                 } else {
-                    prevBtn.classList.remove('hidden');
-                    nextBtn.classList.remove('hidden');
+                    page.classList.remove('active');
+                    page.style.display = 'none';
                 }
-            }
+            });
 
-            nextBtn.addEventListener('click', () => {
+            // Update Corners
+            if (navPrev) {
+                if (currentPage === 1) navPrev.classList.add('hidden');
+                else navPrev.classList.remove('hidden');
+            }
+            if (navNext) {
+                if (currentPage === totalPages) navNext.classList.add('hidden');
+                else navNext.classList.remove('hidden');
+            }
+        }
+
+        if (navNext) {
+            navNext.addEventListener('click', () => {
                 if (currentPage < totalPages) {
                     currentPage++;
-                    updateNavigation();
+                    updatePageNavigation();
                 }
             });
+        }
 
-            prevBtn.addEventListener('click', () => {
+        if (navPrev) {
+            navPrev.addEventListener('click', () => {
                 if (currentPage > 1) {
                     currentPage--;
-                    updateNavigation();
+                    updatePageNavigation();
                 }
             });
-
-            // Initialize state
-            updateNavigation();
-        }, 2000); // Adjusted to give time for vibration + opening
+        }
     });
+
+
+    // --- Effects ---
+
+    function createConfetti(element, colors) {
+        const rect = element.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        for (let i = 0; i < 100; i++) {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            document.body.appendChild(confetti);
+
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const size = Math.random() * 8 + 4;
+
+            // Random direction
+            const angle = Math.random() * 360;
+            const distance = Math.random() * 200 + 50;
+            const duration = Math.random() * 1.5 + 1;
+
+            confetti.style.cssText = `
+                position: fixed;
+                left: ${centerX}px;
+                top: ${centerY}px;
+                width: ${size}px;
+                height: ${size}px;
+                background-color: ${color};
+                z-index: 1000;
+                pointer-events: none;
+                transform: rotate(${Math.random() * 360}deg);
+                animation: particleFade ${duration}s ease-out forwards;
+            `;
+
+            // Animate using Web Animations API for dynamic values
+            const keyframes = [
+                { transform: `translate(0,0) rotate(0)` },
+                { transform: `translate(${Math.cos(angle * Math.PI / 180) * distance}px, ${Math.sin(angle * Math.PI / 180) * distance}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+            ];
+
+            confetti.animate(keyframes, {
+                duration: duration * 1000,
+                easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+                fill: 'forwards'
+            }).onfinish = () => confetti.remove();
+        }
+    }
+
+    function createHearts(element) {
+        const rect = element.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        for (let i = 0; i < 60; i++) {
+            const heart = document.createElement('div');
+            heart.textContent = '♥';
+            document.body.appendChild(heart);
+
+            const size = Math.random() * 20 + 10;
+            const hue = Math.random() * 30 + 330; // Reds/Pinks
+
+            const angle = Math.random() * 360;
+            const distance = Math.random() * 250 + 50;
+            const duration = Math.random() * 2 + 1.5;
+
+            heart.style.cssText = `
+                position: fixed;
+                left: ${centerX}px;
+                top: ${centerY}px;
+                font-size: ${size}px;
+                color: hsl(${hue}, 80%, 60%);
+                z-index: 1000;
+                pointer-events: none;
+                user-select: none;
+                animation: particleFade ${duration}s ease-out forwards;
+            `;
+
+            const keyframes = [
+                { transform: `translate(0,0) scale(0)` },
+                { transform: `translate(${Math.cos(angle * Math.PI / 180) * distance}px, ${Math.sin(angle * Math.PI / 180) * distance}px) scale(1)`, opacity: 0 }
+            ];
+
+            heart.animate(keyframes, {
+                duration: duration * 1000,
+                easing: 'cubic-bezier(0.2, 0.9, 0.3, 1)',
+                fill: 'forwards'
+            }).onfinish = () => heart.remove();
+        }
+    }
 });

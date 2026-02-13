@@ -31,9 +31,143 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    align-items: center;
     z-index: 2;
-    /* Ensure container is above background */
+}
+
+/* Stack Layout */
+.stack-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1200px;
+    /* Essential for 3D effect */
+    overflow: hidden;
+}
+
+.letters-stack {
+    position: relative;
+    width: 100%;
+    /* Full width to allow content to expand */
+    height: 100%;
+    /* Full height */
+    transform-style: preserve-3d;
+    pointer-events: none;
+    /* Let clicks pass through empty areas if needed */
+}
+
+.letter-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Full screen card container */
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.6s ease;
+    transform-style: preserve-3d;
+    display: flex;
+    /* Ensure centering of internal content */
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    /* Default none, active will enable */
+}
+
+/* Internal fix to make sure envelope wrapper is centered in the card */
+.letter-card .envelope-wrapper {
+    position: relative;
+    transform-style: flat;
+    pointer-events: auto;
+    /* Envelope is always clickable if card is active? Handled by card events */
+}
+
+/* Active Letter (Front) */
+.letter-card.active {
+    transform: translate3d(0, 0, 0) rotateY(0deg);
+    z-index: 10;
+    opacity: 1;
+    pointer-events: auto;
+    /* Enable interaction for active card */
+}
+
+/* Inactive/Back Letter (Behind) */
+/* Next letter waiting in background (to the right slightly or just behind) */
+.letter-card.next {
+    transform: translate3d(60px, 0, -150px) rotateY(-15deg);
+    z-index: 5;
+    opacity: 0.6;
+    pointer-events: none;
+    /* Can't click background letter */
+}
+
+/* Prev letter waiting in background (to the left) */
+.letter-card.prev {
+    transform: translate3d(-60px, 0, -150px) rotateY(15deg);
+    z-index: 5;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Hidden letters (far away) */
+.letter-card.far-back {
+    transform: translate3d(0, 0, -300px);
+    z-index: 1;
+    opacity: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Reading Mode - Flattens the card and brings it to front (Modal style) */
+.letter-card.reading-mode {
+    transform: none !important;
+    opacity: 1 !important;
+    z-index: 10000 !important;
+    /* Optional: use fixed positioning to break out of container overflow if needed, 
+       but absolute within the container usually sufficient if container is full screen.
+       Let's stick to absolute first to keep context. */
+    pointer-events: auto !important;
+}
+
+/* Navigation Buttons */
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, background 0.2s ease;
+    z-index: 20;
+    /* Above letters */
+    color: var(--text-color);
+}
+
+.nav-btn:hover {
+    transform: translateY(-50%) scale(1.1);
+    background: white;
+}
+
+.prev-letter {
+    left: 20px;
+}
+
+.next-letter {
+    right: 20px;
+}
+
+/* Valentine Theme Overrides if needed */
+#letter-valentine .seal {
+    background-color: #e91e63;
+    /* Pinker heart for valentine */
 }
 
 /* Background Overlay */
@@ -234,21 +368,28 @@ body {
 }
 
 /* Confetti Animation */
-@keyframes confettiFall {
+/* Confetti/Heart Animation */
+@keyframes particleFade {
     0% {
-        transform: translate(0, 0) rotate(0deg);
         opacity: 1;
     }
 
     100% {
-        transform: translate(var(--tx), var(--ty)) rotate(var(--rotation));
         opacity: 0;
     }
 }
 
 /* Content Styles */
+/* Content Styles */
 .content {
     position: absolute;
+    /* Explicit centering to be safe */
+    top: 50%;
+    left: 50%;
+    /* Start with offset, will animate to -50%, -50% */
+    transform: translate(-50%, -40%);
+    /* 50px offset approx */
+
     width: 90%;
     max-width: 600px;
     height: 80vh;
@@ -256,12 +397,29 @@ body {
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     opacity: 0;
-    transform: translateY(50px);
-    transition: opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s;
+
+    transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
+    /* Faster transition with less delay */
     overflow: hidden;
     /* Hide overflow on container, scroll wrapper handles it */
     text-align: center;
     z-index: 100;
+}
+
+.close-icon {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 32px;
+    color: var(--text-color);
+    cursor: pointer;
+    z-index: 200;
+    line-height: 1;
+    transition: color 0.3s ease;
+}
+
+.close-icon:hover {
+    color: var(--heart-color);
 }
 
 .scroll-wrapper {
@@ -282,8 +440,8 @@ body {
 }
 
 .content.visible {
-    opacity: 1;
-    transform: translateY(0);
+    opacity: 1 !important;
+    transform: translate(-50%, -50%);
 }
 
 .hidden {
@@ -702,7 +860,7 @@ p {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    animation: fadeIn 0.5s ease;
+    /* animation: fadeIn 0.5s ease; */
 }
 
 .page.active {

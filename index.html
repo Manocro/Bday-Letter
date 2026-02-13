@@ -14,127 +14,181 @@
 
 <body>
     <div class="background-overlay" id="background-overlay"></div>
-    <div class="container">
-        <div class="envelope-wrapper" id="envelope-wrapper">
-            <div class="envelope">
-                <div class="flap"></div>
-                <div class="body"></div>
-                <div class="seal" id="seal">
-                    <div class="heart">♥</div>
+
+    <div class="stack-container">
+        <!-- Navigation Buttons -->
+        <button class="nav-btn prev-letter" id="prev-letter" aria-label="Previous Letter">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 18l-6-6 6-6" />
+            </svg>
+        </button>
+
+        <div class="letters-stack">
+            <!-- Letter 1: Bday Letter (Active) -->
+            <div class="letter-card active" id="letter-bday" data-index="0">
+                <div class="envelope-wrapper">
+                    <div class="envelope">
+                        <div class="flap"></div>
+                        <div class="body"></div>
+                        <div class="seal">
+                            <div class="heart">♥</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content hidden">
+                    <div class="close-icon">&times;</div>
+                    <div class="scroll-wrapper">
+                        <div class="card">
+                            <!-- Page 1: Letter + 2 Photos with text wrapping -->
+                            <div class="page active" id="bday-page-1">
+                                <header>
+                                    <h1>To my love...</h1>
+                                </header>
+                                <section class="letter">
+                                    <div class="photo-frame float-left">
+                                        <img src="assets/images/1.jpg" alt="Our Memory 1">
+                                    </div>
+                                    <p>
+                                        Remember how we joked about me making this? Well, I took it to heart and
+                                        decided to go for
+                                        it. I wanted to create something that involved what we both study.
+                                        Consider this our private digital corner—a vault for our memories. I
+                                        built this so that no
+                                        matter where you are or what time it is, you can open this page and be
+                                        instantly reminded of
+                                        how much I love you.
+                                    </p>
+                                    <p>
+                                        Every moment we share becomes a treasure that I hold close to my heart.
+                                        These photos are
+                                        just
+                                        a glimpse of all the beautiful memories we've created together, and I
+                                        wanted to put them
+                                        here
+                                        so you can see how special every moment with you truly is.
+                                    </p>
+                                    <div class="photo-frame float-right">
+                                        <img src="assets/images/2.jpg" alt="Our Memory 2">
+                                    </div>
+                                    <p>
+                                        I cherish every smile, every laugh, and every quiet moment between us.
+                                        You make ordinary
+                                        days
+                                        extraordinary, and I'm so grateful for everything we share. Thank you
+                                        for being you.
+                                    </p>
+                                </section>
+                            </div>
+
+                            <!-- Page 2: Gallery - 3 Photos -->
+                            <div class="page" id="bday-page-2">
+                                <h2>Our Memories</h2>
+                                <p>
+                                    I want you to know that I love you more than words can express.
+                                    I can make songs, I can make music that you might not understand, and there
+                                    is no other way to
+                                    fully express my love for you.
+                                    I know I haven't always been perfect. I am truly sorry for the mistakes I've
+                                    made, and I am so
+                                    grateful that you've stuck with me through everything we've endured.
+                                    Thank you for the love you give me, and thank you for existing. My life is
+                                    better just because
+                                    you are in it.
+                                    I'm not always the most creative guy, but I poured my heart into this for
+                                    you. I hope you love
+                                    it.
+                                </p>
+                                <section class="gallery">
+                                    <div class="photo-grid page-2-photos">
+                                        <div class="photo-frame">
+                                            <img src="assets/images/4.jpg" alt="Our Memory 3">
+                                        </div>
+                                        <div class="photo-frame">
+                                            <img src="assets/images/6.jpg" alt="Our Memory 4">
+                                        </div>
+                                        <div class="photo-frame">
+                                            <img src="assets/images/5.jpg" alt="Our Memory 5">
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <!-- Page 3: Closing + 1 Photo -->
+                            <div class="page" id="bday-page-3">
+                                <section class="closing">
+                                    <div class="photo-grid page-3-photos">
+                                        <div class="photo-frame">
+                                            <img src="assets/images/3.jpg" alt="Our Memory 6">
+                                        </div>
+                                    </div>
+                                    <p>
+                                        Every moment that I spend with you is a treasure for me. And I can't
+                                        wait for all the
+                                        memories
+                                        we are going to make together. So let's make the most of every moment
+                                        and eventually break
+                                        this small website because of how many pictures we have.
+                                    </p>
+                                    <footer>
+                                        <p>Forever your silly and goofy boyfriend,</p>
+                                        <p class="signature">Manuel E. De La Rosa Modesto</p>
+                                    </footer>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Corners -->
+                    <div class="corner-nav next-page hidden" data-target="next">
+                        <div class="corner-triangle"></div>
+                    </div>
+                    <div class="corner-nav prev-page hidden" data-target="prev">
+                        <div class="corner-triangle"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Letter 2: Valentine's Letter -->
+            <div class="letter-card" id="letter-valentine" data-index="1">
+                <div class="envelope-wrapper">
+                    <div class="envelope">
+                        <div class="flap"></div>
+                        <div class="body"></div>
+                        <div class="seal">
+                            <div class="heart">♥</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content hidden">
+                    <div class="close-icon">&times;</div>
+                    <div class="scroll-wrapper">
+                        <div class="card">
+                            <div class="page active">
+                                <header>
+                                    <h1>Happy Valentine's Day!</h1>
+                                </header>
+                                <section class="letter">
+                                    <p>
+                                        [Placeholder for Valentine's Letter Content]
+                                    </p>
+                                    <p>
+                                        More sweet words and memories will go here...
+                                    </p>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="content hidden" id="content">
-            <div class="scroll-wrapper">
-                <div class="card">
-                    <!-- Page 1: Letter + 2 Photos with text wrapping -->
-                    <div class="page active" id="page-1">
-                        <header>
-                            <h1>To my love...</h1>
-                        </header>
-                        <section class="letter">
-                            <div class="photo-frame float-left">
-                                <img src="assets/images/1.jpg" alt="Our Memory 1">
-                            </div>
-                            <p>
-                                Remember how we joked about me making this? Well, I took it to heart and
-                                decided to go for
-                                it. I wanted to create something that involved what we both study.
-                                Consider this our private digital corner—a vault for our memories. I
-                                built this so that no
-                                matter where you are or what time it is, you can open this page and be
-                                instantly reminded of
-                                how much I love you.
-                            </p>
-                            <p>
-                                Every moment we share becomes a treasure that I hold close to my heart.
-                                These photos are
-                                just
-                                a glimpse of all the beautiful memories we've created together, and I
-                                wanted to put them
-                                here
-                                so you can see how special every moment with you truly is.
-                            </p>
-                            <div class="photo-frame float-right">
-                                <img src="assets/images/2.jpg" alt="Our Memory 2">
-                            </div>
-                            <p>
-                                I cherish every smile, every laugh, and every quiet moment between us.
-                                You make ordinary
-                                days
-                                extraordinary, and I'm so grateful for everything we share. Thank you
-                                for being you.
-                            </p>
-                        </section>
-                    </div>
-
-                    <!-- Page 2: Gallery - 3 Photos -->
-                    <div class="page" id="page-2">
-                        <h2>Our Memories</h2>
-                        <p>
-                            I want you to know that I love you more than words can express.
-                            I can make songs, I can make music that you might not understand, and there
-                            is no other way to
-                            fully express my love for you.
-                            I know I haven't always been perfect. I am truly sorry for the mistakes I've
-                            made, and I am so
-                            grateful that you've stuck with me through everything we've endured.
-                            Thank you for the love you give me, and thank you for existing. My life is
-                            better just because
-                            you are in it.
-                            I'm not always the most creative guy, but I poured my heart into this for
-                            you. I hope you love
-                            it.
-                        </p>
-                        <section class="gallery">
-                            <div class="photo-grid page-2-photos">
-                                <div class="photo-frame">
-                                    <img src="assets/images/4.jpg" alt="Our Memory 3">
-                                </div>
-                                <div class="photo-frame">
-                                    <img src="assets/images/6.jpg" alt="Our Memory 4">
-                                </div>
-                                <div class="photo-frame">
-                                    <img src="assets/images/5.jpg" alt="Our Memory 5">
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-
-                    <!-- Page 3: Closing + 1 Photo -->
-                    <div class="page" id="page-3">
-                        <section class="closing">
-                            <div class="photo-grid page-3-photos">
-                                <div class="photo-frame">
-                                    <img src="assets/images/3.jpg" alt="Our Memory 6">
-                                </div>
-                            </div>
-                            <p>
-                                Every moment that I spend with you is a treasure for me. And I can't
-                                wait for all the
-                                memories
-                                we are going to make together. So let's make the most of every moment
-                                and eventually break
-                                this small website because of how many pictures we have.
-                            </p>
-                            <footer>
-                                <p>Forever your silly and goofy boyfriend,</p>
-                                <p class="signature">Manuel E. De La Rosa Modesto</p>
-                            </footer>
-                        </section>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Navigation Corners -->
-            <div class="corner-nav next-page" id="nav-next">
-                <div class="corner-triangle"></div>
-            </div>
-            <div class="corner-nav prev-page" id="nav-prev">
-                <div class="corner-triangle"></div>
-            </div>
-        </div>
+        <button class="nav-btn next-letter" id="next-letter" aria-label="Next Letter">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 18l6-6-6-6" />
+            </svg>
+        </button>
     </div>
     <script src="script.js"></script>
 </body>
